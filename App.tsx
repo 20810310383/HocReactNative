@@ -1,33 +1,37 @@
 import { useState } from 'react';
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import InputTodo from './components/todo/input.todo';
+import ListTodo from './components/todo/list.todo';
 
 export default function App() {
+  const [todoList, setTodoList] = useState<ITodo[]>([])
 
-  const [name, setName] = useState<string>("a")
+  function randomInteger(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
 
-
+  const addTodo = (text: string) => {
+    // alert(text)
+    const todo = {id: randomInteger(1,1000000), title: text}
+    setTodoList([...todoList, todo])
+  }
+  const deleteTodo = (id: number) => {
+    // alert(text)
+    const newTodo = todoList.filter(todo => todo.id !== id)
+    setTodoList(newTodo)
+  }
   return (
     <View style={styles.container}>
-      <View>
-        <TextInput 
-        onChangeText={v => setName(v)}
-        value={name}
-        autoCapitalize='words'
-        // keyboardType='numeric'
-        // maxLength={6}
-        // multiline={true}
-        autoCorrect={false}
-        style={styles.textInput}
-         />
-        <Text style={styles.text}>{name}</Text>
-      </View>
+      
+      <InputTodo
+      addTodo={addTodo}
+      />
 
-      <Button title="Add new"  />
-
-      <Text style={styles.text}>
-        hello khac tu hihi
-        <Text style={styles.tudeptrai}> tu dep trai</Text>
-        </Text>      
+      <ListTodo
+      todoList={todoList}
+      deleteTodo={deleteTodo}
+      />
+      
     </View>
   );
 }
@@ -40,18 +44,5 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',    
     paddingTop: 50,
     paddingHorizontal: 20
-  },
-
-  text: {
-    fontSize: 30,
-    color: "red"
-  },
-  tudeptrai: {
-    color: "green"
   }, 
-  textInput: {
-    borderColor: "violet",
-    borderWidth: 1,
-    padding: 10
-  }
 });
